@@ -1,0 +1,25 @@
+from enum import Enum
+
+PACKAGE_BASIC_MAX_ITEMS = 4
+PACKAGE_DELUXE_MAX_ITEMS = 8
+ORGANIZATION_ID = 786257524
+ITEM_NOT_FOUND_ID = '3408460000000944043'
+ALCOHOLIC_BEVERAGES_ID = '3408460000001848009'
+TABLEWARE_SETS_COMPOSTABLE_ID = '3408460000000786001'
+TABLEWARE_SETS_PORCELAIN_ID = '3408460000003544047'
+ESTIMATE_DEFAULT_FILTER = {'status': 'draft'}
+
+
+ZBOOK_API_ESTIMATE_URL = 'https://www.zohoapis.com/books/v3/estimates',
+ZBOOK_API_PRODUCTS_URL = 'https://www.zohoapis.com/books/v3/items',
+ZBOOK_API_CONTACTS_URL = 'https://www.zohoapis.com/books/v3/contacts'
+ZCRM_API_CONTACT_URL = 'https://books.zoho.com/api/v3/crm/contact'
+ZCRM_API_CONTACT_URL_NEW = 'www.zohoapis.com/books/v3'
+class ZOHO_BOOK_ENDPOINTS(str, Enum):
+    ESTIMATE = ZBOOK_API_ESTIMATE_URL
+    PRODUCTS = ZBOOK_API_PRODUCTS_URL
+    CONTACTS = ZBOOK_API_CONTACTS_URL
+    CRM_CONTACT = ZCRM_API_CONTACT_URL
+
+    def __str__(self) -> str:
+        return self.value
