@@ -78,6 +78,7 @@ from zohobooks.constants import ESTIMATE_DEFAULT_FILTER
 
 
 def lambda_handler(event, context):
+   
     requested_items = OrderedDict()
     customer_id = None
     response = None
@@ -86,8 +87,6 @@ def lambda_handler(event, context):
     name = event.get('name')
     email = event.get('email')
     zhbooks = ZohoBooks(auth=ZohoAuth(), products=get_all_fne_products())
-
-    log(event)
     
     try:
         print(f'Fetching customer: {email}')

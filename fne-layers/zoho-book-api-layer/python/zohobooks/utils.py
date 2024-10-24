@@ -11,7 +11,7 @@ from zohobooks.constants import ALCOHOLIC_BEVERAGES_ID, TABLEWARE_SETS_COMPOSTAB
 from dateutil import parser
 
 DELUXE_PACKAGE_TOTAL_ITEMS = 8
-BASIC_PACKAGE_TOTAL_ITEMS = 4
+BASIC_PACKAGE_TOTAL_ITEMS = 5
 ADDITIONAL_ITEM_RATE = 3
 
 global TIER
@@ -60,28 +60,13 @@ def getItemRate(current_item, items, guests_count):
     for item in items:
         if(item == current_item):
             index = items.index(item)
-            if(index + 1 <= 4):
-                return price_per_person / 4
+            if(index + 1 <= BASIC_PACKAGE_TOTAL_ITEMS):
+                return price_per_person / BASIC_PACKAGE_TOTAL_ITEMS
             else:
-                return 3
-
-    if(total_items >= 1 and total_items < DELUXE_PACKAGE_TOTAL_ITEMS):
-        index = items.index(current_item)
-        if(index + 1 <= 4):
-            return price_per_person / 4
-        else:
-            return 3
-        
-    if(total_items >= 8):
-        index = items.index(current_item)
-        if(index + 1 <= 8):
-            return price_per_person / 8
-        else:
-            return 3
-        
+                return ADDITIONAL_ITEM_RATE
 
 def getPremiumItemRate(item):
-    return 1.25 * item.get('cf_premium').count('*')
+    return 1 * item.get('cf_premium').count('*')
 
 def isPremiumItem(item):
     return '*' in item.get('cf_premium')
@@ -125,29 +110,18 @@ def flattened_list(items):
         flattened_list.extend(value)
     return flattened_list
 
-def determine_price_per_person(total_items, guests_count):
+def determine_price_per_person(guests_count):
     global TIER
-    if(total_items < DELUXE_PACKAGE_TOTAL_ITEMS):
-        if(guests_count >= 15 and guests_count < 50):
-            TIER = 1
-            return 19
-        elif(guests_count >= 50 and guests_count <= 99):
-            TIER = 2
-            return 17
-        else:
-            TIER = 3
-            return 15
-        
-    if(total_items >= DELUXE_PACKAGE_TOTAL_ITEMS):
-        if(guests_count >= 15 and guests_count < 50):
-            TIER = 1
-            return 28
-        elif(guests_count >= 50 and guests_count <= 99):
-            TIER = 2
-            return 26
-        else:
-            TIER = 3
-            return 21
+
+    if(guests_count >= 20 and guests_count < 50):
+        TIER = 1
+        return 21
+    elif(guests_count >= 50 and guests_count < 100):
+        TIER = 2
+        return 19
+    else:
+        TIER = 3
+        return 17
 
 
 def foodItemsTranslator(guests_count, items):
@@ -158,22 +132,15 @@ def foodItemsTranslator(guests_count, items):
     newFoodItems = []
     total_items = len(items)
     guests_count = int(guests_count)
-    price_per_person = determine_price_per_person(total_items, guests_count)
+    price_per_person = determine_price_per_person(guests_count)
     additioanal_field = {'header_name': 'Menu', 'quantity': guests_count}
     
     for index, item in enumerate(items):
         rate = 0
-        if(total_items < DELUXE_PACKAGE_TOTAL_ITEMS):
-            if(index + 1 <= BASIC_PACKAGE_TOTAL_ITEMS):
-                rate = 0
-            else:
-                rate = ADDITIONAL_ITEM_RATE            
-
-        if(total_items >= DELUXE_PACKAGE_TOTAL_ITEMS):
-            if(index + 1 <= DELUXE_PACKAGE_TOTAL_ITEMS):
-                rate = 0
-            else:
-                rate = ADDITIONAL_ITEM_RATE
+        if(index + 1 <= BASIC_PACKAGE_TOTAL_ITEMS):
+            rate = 0
+        else:
+            rate = ADDITIONAL_ITEM_RATE            
                  
         if(isPremiumItem(item)): 
             rate = getPremiumItemRate(item)
@@ -324,3 +291,4 @@ def parse_services(service_string):
     stripped = service_string.strip("[]")
     services = [s.strip().strip("'\"") for s in stripped.split(",")]
     return services
+
