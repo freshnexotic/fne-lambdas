@@ -12,7 +12,7 @@ from dateutil import parser
 
 DELUXE_PACKAGE_TOTAL_ITEMS = 8
 BASIC_PACKAGE_TOTAL_ITEMS = 4
-ADDITIONAL_ITEM_RATE = 2.5
+ADDITIONAL_ITEM_RATE = 3
 
 global TIER
 
@@ -63,21 +63,21 @@ def getItemRate(current_item, items, guests_count):
             if(index + 1 <= 4):
                 return price_per_person / 4
             else:
-                return 2.5
+                return 3
 
     if(total_items >= 1 and total_items < DELUXE_PACKAGE_TOTAL_ITEMS):
         index = items.index(current_item)
         if(index + 1 <= 4):
             return price_per_person / 4
         else:
-            return 2.5
+            return 3
         
     if(total_items >= 8):
         index = items.index(current_item)
         if(index + 1 <= 8):
             return price_per_person / 8
         else:
-            return 2.5
+            return 3
         
 
 def getPremiumItemRate(item):
@@ -130,10 +130,10 @@ def determine_price_per_person(total_items, guests_count):
     if(total_items < DELUXE_PACKAGE_TOTAL_ITEMS):
         if(guests_count >= 15 and guests_count < 50):
             TIER = 1
-            return 21
+            return 19
         elif(guests_count >= 50 and guests_count <= 99):
             TIER = 2
-            return 19
+            return 17
         else:
             TIER = 3
             return 15
@@ -141,13 +141,13 @@ def determine_price_per_person(total_items, guests_count):
     if(total_items >= DELUXE_PACKAGE_TOTAL_ITEMS):
         if(guests_count >= 15 and guests_count < 50):
             TIER = 1
-            return 30
+            return 28
         elif(guests_count >= 50 and guests_count <= 99):
             TIER = 2
-            return 28
+            return 26
         else:
             TIER = 3
-            return 24
+            return 21
 
 
 def foodItemsTranslator(guests_count, items):
@@ -264,19 +264,19 @@ def getServiceFees(services):
     global TIER
     
     if('Pickup' in services):
-        services_description = 'labor'
+        services_description = ''
         fee = 10 if TIER == 1 else 10 if TIER == 2 else 10
         
     if('Buffet-Style Setup' in services):
-        services_description = f'labor, {DELIVERY_SERVICE_KEY}, buffet setup'
-        fee = 25 if TIER == 1 else 20 if TIER == 2 else 15
+        services_description = f'{DELIVERY_SERVICE_KEY}, buffet setup'
+        fee = 20 if TIER == 1 else 18 if TIER == 2 else 15
 
     if('Serve' in services):
-        services_description = f'labor, {DELIVERY_SERVICE_KEY}, buffet setup, clean-up'
+        services_description = f'{DELIVERY_SERVICE_KEY}, buffet setup, clean-up'
         fee = 35 if TIER == 1 else 35 if TIER == 2 else 30
 
     if('Plated' in services):
-        services_description = f'labor, {DELIVERY_SERVICE_KEY}, plated service, clean-up'
+        services_description = f'{DELIVERY_SERVICE_KEY}, plated service, clean-up'
         fee = 35 if TIER == 1 else 35 if TIER == 2 else 30
 
     return fee, services_description
