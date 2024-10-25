@@ -43,8 +43,8 @@ def filter_products_by_status(products, status):
 def get_all_fne_products():
     s3 = boto3.client(
         's3',
-        aws_access_key_id='AKIAVHKMPUFELBHUEOUJ',
-        aws_secret_access_key='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',
+        aws_access_key_id='AKIAVHKMPUFEFFEGNJ2E',
+        aws_secret_access_key='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',
         region_name='us-east-1'
     )
     data = s3.get_object(Bucket='fne-misc', Key='fne-products.csv')
